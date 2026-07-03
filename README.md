@@ -9,8 +9,8 @@ Built **phase by phase**, mirroring the 6 setup stages from the spec:
 | Phase | Stage | Status |
 |-------|-------|--------|
 | 1 | Brand inputs (vision, goal, moat) | ✅ Done |
-| 2 | ICP builder (personas + variants) | ⏳ Next |
-| 3 | Voice codifier (samples, banned words, rewrite pairs) | ⏳ |
+| 2 | ICP builder (personas + variants) | ✅ Done |
+| 3 | Voice codifier (samples, banned words, rewrite pairs) | ✅ Done |
 | 4 | Competitor agent + Knowledge base | ⏳ |
 | 5 | Pillar synthesis (4–6 approved pillars) | ⏳ |
 | 6 | Brand context store (the brand brain) | ⏳ |
@@ -74,6 +74,30 @@ npm run dev
 
 `Brand` = `{ name, vision, goal, moat }` (+ id, timestamps). `name` required; the
 rest optional and trimmed. Each later phase adds related tables keyed on `brand.id`.
+
+## Phase 2 API (ICP builder)
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET    | `/api/brands/{brand_id}/personas` | list personas (variants nested) |
+| POST   | `/api/brands/{brand_id}/personas` | create persona (max 5/brand → 400) |
+| PATCH  | `/api/personas/{id}`              | update; sending `variants` replaces the list |
+| DELETE | `/api/personas/{id}`              | delete (variants cascade) |
+
+`Persona` = `{ name, description, variants: [{ label, description }] }` keyed on a
+brand. Max 5 personas per brand; each persona holds any number of variants.
+Front-end phases are switched via the top tab strip in `App.tsx`.
+
+## Phase 3 API (Voice codifier)
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/api/brands/{brand_id}/voice` | fetch the profile (auto-creates an empty one on first read) |
+| PUT | `/api/brands/{brand_id}/voice` | replace the whole profile |
+
+`VoiceProfile` = one row per brand, stored as JSONB documents:
+`samples: string[]`, `banned_terms: string[]` (deduped case-insensitively),
+`rewrite_pairs: [{ dont, do }]`. Edited and saved as a whole (single PUT).
 
 ## Adding a phase
 

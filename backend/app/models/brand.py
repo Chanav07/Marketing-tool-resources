@@ -1,10 +1,15 @@
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String, Text
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+
+if TYPE_CHECKING:
+    from app.models.persona import Persona
+    from app.models.voice import VoiceProfile
 
 
 class Brand(Base):
@@ -25,3 +30,19 @@ class Brand(Base):
     vision: Mapped[str | None] = mapped_column(Text, nullable=True)
     goal: Mapped[str | None] = mapped_column(Text, nullable=True)
     moat: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Phase 2 — ICP builder
+    personas: Mapped[list["Persona"]] = relationship(
+        back_populates="brand",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        order_by="Persona.position",
+    )
+
+    # Phase 3 — Voice codifier (one-to-one)
+    voice_profile: Mapped["VoiceProfile"] = relationship(
+        back_populates="brand",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        uselist=False,
+    )
