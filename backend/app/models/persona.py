@@ -28,7 +28,17 @@ class Persona(Base):
         index=True,
     )
     name: Mapped[str] = mapped_column(String(200), nullable=False)
-    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Who is this user? (structured definition)
+    user_type: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    business_size: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    region: Mapped[str | None] = mapped_column(String(100), nullable=True)
+
+    # Qualitative sub-parts
+    pain_points: Mapped[str | None] = mapped_column(Text, nullable=True)
+    current_platforms: Mapped[str | None] = mapped_column(Text, nullable=True)
+    main_goal: Mapped[str | None] = mapped_column(Text, nullable=True)
+
     position: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
     brand: Mapped["Brand"] = relationship(back_populates="personas")

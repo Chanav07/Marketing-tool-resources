@@ -84,9 +84,11 @@ rest optional and trimmed. Each later phase adds related tables keyed on `brand.
 | PATCH  | `/api/personas/{id}`              | update; sending `variants` replaces the list |
 | DELETE | `/api/personas/{id}`              | delete (variants cascade) |
 
-`Persona` = `{ name, description, variants: [{ label, description }] }` keyed on a
-brand. Max 5 personas per brand; each persona holds any number of variants.
-Front-end phases are switched via the top tab strip in `App.tsx`.
+`Persona` = `{ name, user_type, business_size, region, pain_points,
+current_platforms, main_goal, variants: [{ label, description }] }` keyed on a
+brand. `user_type` (Accountant/CA/Business owner) and `business_size` (Small/SME)
+are dropdowns; the rest free text. Max 5 personas per brand; each holds any number
+of variants. Front-end phases are switched via the top tab strip in `App.tsx`.
 
 ## Phase 3 API (Voice codifier)
 

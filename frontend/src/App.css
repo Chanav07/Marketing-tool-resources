@@ -82,7 +82,25 @@ body {
 .variant-list li { font-size: 13px; }
 .variant-list li span { color: var(--muted); }
 
+.persona-meta { font-size: 12px; margin-top: 2px; }
+.define-user { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.define-user select, .define-user input {
+  background: var(--panel-2); border: 1px solid var(--line); color: var(--text);
+  border-radius: 9px; padding: 9px 12px; font: inherit;
+}
+.persona-parts { margin: 14px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.persona-parts div { display: flex; flex-direction: column; gap: 2px; }
+.persona-parts dt {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); font-weight: 600;
+}
+.persona-parts dd { margin: 0; font-size: 14px; }
+
 .persona-editor h3 { margin: 0 0 4px; font-size: 16px; }
+
+@media (max-width: 640px) {
+  .define-user { grid-template-columns: 1fr; }
+}
 .variants-block { display: flex; flex-direction: column; gap: 10px; }
 .variants-head { display: flex; flex-direction: column; gap: 2px; }
 .variant-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }

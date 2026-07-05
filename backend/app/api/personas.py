@@ -70,12 +70,12 @@ async def create_persona(
             f"A brand can have at most {MAX_PERSONAS_PER_BRAND} personas.",
         )
 
+    fields = payload.model_dump(exclude={"variants"})
     persona = Persona(
         brand_id=brand_id,
-        name=payload.name,
-        description=payload.description,
         position=count,
         variants=_build_variants(payload.variants),
+        **fields,
     )
     db.add(persona)
     await db.commit()
@@ -91,11 +91,13 @@ async def update_persona(
     persona = await _load_persona(persona_id, db)
     data = payload.model_dump(exclude_unset=True)
 
-    if "name" in data and data["name"] is not None:
+    if data.get("name") is not None:
         persona.name = data["name"]
-    if "description" in data:
-        persona.description = data["description"]
-    if "variants" in data and data["variants"] is not None:
+    for field in ("user_type", "business_size", "region",
+                  "pain_points", "current_platforms", "main_goal"):
+        if field in data:
+            setattr(persona, field, data[field])
+    if data.get("variants") is not None:
         persona.variants = _build_variants(payload.variants)
 
     await db.commit()

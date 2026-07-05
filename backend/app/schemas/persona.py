@@ -40,7 +40,14 @@ class VariantOut(BaseModel):
 
 class PersonaBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
-    description: str | None = Field(None, max_length=2000)
+    # Define the user
+    user_type: str | None = Field(None, max_length=100)
+    business_size: str | None = Field(None, max_length=50)
+    region: str | None = Field(None, max_length=100)
+    # Sub-parts
+    pain_points: str | None = Field(None, max_length=2000)
+    current_platforms: str | None = Field(None, max_length=2000)
+    main_goal: str | None = Field(None, max_length=2000)
 
     @field_validator("name")
     @classmethod
@@ -50,9 +57,12 @@ class PersonaBase(BaseModel):
             raise ValueError("persona name cannot be blank")
         return v
 
-    @field_validator("description")
+    @field_validator(
+        "user_type", "business_size", "region",
+        "pain_points", "current_platforms", "main_goal",
+    )
     @classmethod
-    def strip_desc(cls, v: str | None) -> str | None:
+    def strip_optional(cls, v: str | None) -> str | None:
         return _clean(v)
 
 
@@ -64,10 +74,18 @@ class PersonaUpdate(BaseModel):
     """Partial update. If `variants` is provided, it replaces the full list."""
 
     name: str | None = Field(None, min_length=1, max_length=200)
-    description: str | None = Field(None, max_length=2000)
+    user_type: str | None = Field(None, max_length=100)
+    business_size: str | None = Field(None, max_length=50)
+    region: str | None = Field(None, max_length=100)
+    pain_points: str | None = Field(None, max_length=2000)
+    current_platforms: str | None = Field(None, max_length=2000)
+    main_goal: str | None = Field(None, max_length=2000)
     variants: list[VariantIn] | None = Field(None, max_length=20)
 
-    @field_validator("name", "description")
+    @field_validator(
+        "name", "user_type", "business_size", "region",
+        "pain_points", "current_platforms", "main_goal",
+    )
     @classmethod
     def strip_fields(cls, v: str | None) -> str | None:
         return _clean(v)
@@ -79,7 +97,12 @@ class PersonaOut(BaseModel):
     id: uuid.UUID
     brand_id: uuid.UUID
     name: str
-    description: str | None
+    user_type: str | None
+    business_size: str | None
+    region: str | None
+    pain_points: str | None
+    current_platforms: str | None
+    main_goal: str | None
     position: int
     variants: list[VariantOut]
     created_at: datetime

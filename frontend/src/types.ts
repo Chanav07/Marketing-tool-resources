@@ -31,7 +31,12 @@ export interface Persona {
   id: string
   brand_id: string
   name: string
-  description: string | null
+  user_type: string | null
+  business_size: string | null
+  region: string | null
+  pain_points: string | null
+  current_platforms: string | null
+  main_goal: string | null
   position: number
   variants: Variant[]
   created_at: string
@@ -40,9 +45,17 @@ export interface Persona {
 
 export interface PersonaInput {
   name: string
-  description?: string | null
+  user_type?: string | null
+  business_size?: string | null
+  region?: string | null
+  pain_points?: string | null
+  current_platforms?: string | null
+  main_goal?: string | null
   variants?: VariantInput[]
 }
+
+export const USER_TYPES = ['Accountant', 'CA', 'Business owner'] as const
+export const BUSINESS_SIZES = ['Small', 'SME'] as const
 
 export const MAX_PERSONAS = 5
 
